@@ -1,0 +1,520 @@
+body {
+  margin: 0;
+  font-family: Arial;
+}
+
+.bg_1 {
+    /* The image used */
+    //background-image: url("/static/media/emotion_detection/green_background_1.png");
+    background-image: linear-gradient(rgba(225,255,225,0.5), rgba(225,255,225,0.5)), url("/static/media/emotion_detection/green_background_1.png");
+    //opacity: 0.5;
+    //top: 10%;
+    /* Full height */
+    height: 90%;
+    max-width: 100%;
+    width: auto; 
+    position: relative;
+    //width: cover;
+    /* Center and scale the image nicely */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.benefits_img {
+    /* The image used */
+    position: relative;
+    //background-image: url("/static/media/emotion_detection/tutor_online.jpg");
+    //top: 10%;
+    //opacity: 0.2;
+    background-image: linear-gradient(rgba(225,245,225,0.8), rgba(225,255,225,0.8)), url("/static/media/emotion_detection/tutor_online.jpg");
+    /* Full height */
+    height: 90%;
+    max-width: 100%;
+    width: auto;
+    //width: cover;
+    /* Center and scale the image nicely */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.benefits_row_1 {
+    position: relative;
+    top: 10%;
+    //horizontal-align: center;
+    //left: 10%;
+    //right: 10%;
+}
+
+.benefits_row_2 {
+    position: relative;
+    top: 25%;
+    //left: 0%;
+    //right: 0%;
+    //max-height: 80%;
+}
+
+.br2_col1{
+    position: absolute;
+    left: 7%;
+    //top: 30%;
+    max-width: 26%;
+    top: 45%;
+}
+
+.br2_col2{
+    position: absolute;
+    left: 40%;
+    //top: 10%;
+    max-width: 26%;
+    top: 45%;
+}
+
+.br2_col3{
+    position: absolute;
+    left: 73%;
+    max-width: 26%;
+    //top: 45%;
+}
+
+.br2_col1_icon{
+    content: url("/static/media/emotion_detection/icn_access.png");
+    position: relative;
+    //left: 10%;
+    //top: 10%;
+    //width: 50%;
+    float: top;
+    max-width: 50%;
+}
+
+.br2_col1_head{
+    position: relative;
+}
+
+.br2_col1_text{
+    position: relative;
+}
+
+.br2_col2_icon{
+    content: url("/static/media/emotion_detection/icn_chat1.png");
+    position: relative;
+    left: 40%;
+    //top: 10%;
+    max-width: 25%;
+}
+
+.br2_col2_head{
+    position: relative;
+}
+
+.br2_col2_text{
+    position: relative;
+}
+
+.br2_col3_icon{
+    content: url("/static/media/emotion_detection/icn_selfasses.png");
+    position: relative;
+    left: 70%;
+    max-width: 25%;
+}
+
+.br3_col1_head{
+    position: relative;
+}
+
+.br3_col1_text{
+    position: relative;
+}
+
+.pitch {
+    /* The image used */
+    position: relative;
+    //background-image: url("/static/media/emotion_detection/background_brain_1.jpg");
+    background-image: linear-gradient(rgba(200,245,225,0.7), rgba(200,245,225,0.7)), url("/static/media/emotion_detection/background_brain_1.jpg");
+    //top: 10%;
+    /* Full height */
+    height: 90%;
+    max-width: 100%;
+    width: auto;
+    //width: cover;
+    /* Center and scale the image nicely */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.pitch_row_1 {
+    position: relative;
+    top: 15%;
+}
+
+.pitch_row_2 {
+    position: relative;
+    top: 35%;
+}
+
+
+.pr2_col1_icon{
+    content: url("/static/media/emotion_detection/icn_stream.png");
+    position: absolute;
+    left: 8%;
+    //top: 10%;
+    max-width: 5%;
+}
+
+.pr2_col2_icon{
+    content: url("/static/media/emotion_detection/icn_feedback.png");
+    position: absolute;
+    left: 58%;
+    //top: 10%;
+    max-width: 5%;
+}
+
+.pr2_col1{
+    position: absolute;
+    left: 15%;
+    //top: 10%;
+    max-width: 30%;
+}
+
+.pr2_col2{
+    position: absolute;
+    left: 65%;
+    //top: 10%;
+    max-width: 30%;
+}
+
+.pr3_col1_icon{
+    content: url("/static/media/emotion_detection/icn_graph.png");
+    position: absolute;
+    left: 8%;
+    //top: 10%;
+    max-width: 5%;
+}
+
+.pr3_col2_icon{
+    content: url("/static/media/emotion_detection/icn_alert.png");
+    position: absolute;
+    left: 58%;
+    //top: 10%;
+    max-width: 5%;
+}
+
+.pr3_col1{
+    position: absolute;
+    left: 15%;
+    max-width: 30%;
+}
+
+.pr3_col2{
+    position: absolute;
+    left: 65%;
+    max-width: 30%;
+}
+
+.pitch_row_3 {
+    position: relative;
+    top: 65%;
+}
+
+.in_bg_1 {
+    width: 100%;
+    //height: auto;
+    position: absolute;
+    top: 10%;
+    width: 60%;
+    height: 70%;
+    left: 20%;
+    z-index: 5;
+}
+
+.img_logo{
+    position: relative;
+    content: url("/static/media/emotion_detection/dharna2-transparent.png");
+    //background-position: center;
+    height: 75%;
+    left: 10%;
+    width: 80%; 
+    //max-height: 75%;
+    //max-width: 75%;
+    //background-repeat: no-repeat;
+    //z-index: 10;
+}
+
+.roadmap {
+    /* The image used */
+    position: relative;
+    //background-image: url("/static/media/emotion_detection/tutor_online.jpg");
+    //top: 10%;
+    //opacity: 0.2;
+    background-image: linear-gradient(rgba(200,245,225,0.8), rgba(200,245,225,0.8)), url("/static/media/emotion_detection/using_dharna.jpg");
+    /* Full height */
+    height: 90%;
+    max-width: 100%;
+    width: auto;
+    //width: cover;
+    /* Center and scale the image nicely */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+
+.roadmap_row_1 {
+    position: relative;
+    top: 15%;
+}
+
+.intro1 {
+    position: relative;
+    top: -5%;
+    left: 0%;
+    color: #417041;
+}
+
+.ms1{
+    position: relative;
+    top: -5%;
+    left: 0%;
+    background-color: #417041;
+    color: #f1f1f1; 
+}
+
+.dw1{
+    position: relative;
+    left: 0%;
+    top: -5%;
+}
+
+.top-container {
+  background-color: #f1f1f1;
+  padding: 16px;
+  text-align: center;
+}
+
+.header {
+  padding: 10px 16px;
+  background: #555;
+  color: #f1f1f1;
+  height: 10%;
+  //overflow: hidden;
+}
+
+.content {
+  padding: 10px 16px;
+}
+
+.sticky {
+  position: fixed;
+  top: 0;
+  z-index: 10;
+  width: 100%;
+  padding: 10px 16px;
+}
+
+.sticky + .content {
+  padding-top: 102px;
+  padding-right: 16px;
+}
+
+.footer {
+    background: #555;
+    padding: 80px 0;
+    color: #f1f1f1;
+}
+
+.header_links{
+    padding: 10px 16px;
+    //float: right;
+    //align-content: right;
+    position: absolute;
+    left: 55%;
+    //right: 70%;
+    width: 45%;
+    //top: 25%;
+    //display: inline-block;
+}
+
+.header_links a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+.header_links a.active {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.header_links a:link { color: #f1f1f1; }
+
+.header_links a:visited { color: #f1f1f1; }
+
+.hl_1 {float: left; padding: 10px;}
+.hl_2 {float: left; padding: 10px;}
+.hl_3 {float: left; padding: 10px;}
+.hl_4 {float: left; padding: 10px;}
+.hl_5 {float: left; padding: 10px;}
+.hl_6 {float: left; padding: 10px;}
+
+.main-header{
+    float: left;
+    position: absolute;
+    //left: 10%;
+    width: 20%
+    //max-width: 30%;
+    //display: inline-block;
+}
+
+/* Dropdown Button */
+.dropbtn {
+    //background-color: #4CAF50;
+    //color: white;
+    //padding: 16px;
+    //font-size: 16px;
+    //border: none;
+}
+
+.dropbtn1 {
+    //background-color: #4CAF50;
+    //color: white;
+    //padding: 16px;
+    //font-size: 16px;
+    //border: none;
+}
+
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+    position: absolute;
+    display: inline-block;
+    float: left;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #417041;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    float: left;
+}
+
+.dropdown-content1 {
+    display: none;
+    position: absolute;
+    background-color: #417041;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    float: left;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    //float: left;
+}
+
+.dropdown-content1 a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    //float: left;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {background-color: #ddd}
+.dropdown-content1 a:hover {background-color: #ddd}
+
+/* Show the dropdown menu on hover */
+.hl_6:hover .dropdown-content {
+    display: block;
+}
+
+.hl_5:hover .dropdown-content1 {
+    display: block;
+}
+
+/* Change the background color of the dropdown button when the dropdown content is shown */
+.hl_6:hover .dropbtn {
+    background-color: #888;
+}
+
+.hl_5:hover .dropbtn1 {
+    background-color: #888;
+}
+
+.team {
+    /* The image used */
+    position: relative;
+    //background-image: url("/static/media/emotion_detection/team.jpg");
+    background-image: linear-gradient(rgba(200,245,225,0.7), rgba(200,245,225,0.7)), url("/static/media/emotion_detection/team.jpg");
+    //top: 10%;
+    /* Full height */
+    height: 90%;
+    max-width: 100%;
+    width: auto;
+    //width: cover;
+    /* Center and scale the image nicely */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.contact {
+    /* The image used */
+    position: relative;
+    //background-image: url("/static/media/emotion_detection/team.jpg");
+    background-image: linear-gradient(rgba(200,245,225,0.7), rgba(200,245,225,0.7)), url("/static/media/emotion_detection/contact.jpg");
+    //top: 10%;
+    /* Full height */
+    height: 90%;
+    max-width: 100%;
+    width: auto;
+    //width: cover;
+    /* Center and scale the image nicely */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.loggedout {
+    /* The image used */
+    position: relative;
+    //background-image: url("/static/media/emotion_detection/team.jpg");
+    background-image: linear-gradient(rgba(200,245,225,0.7), rgba(200,245,225,0.7)), url("/static/media/emotion_detection/goodbye.jpg");
+    //top: 10%;
+    /* Full height */
+    height: 90%;
+    max-width: 100%;
+    width: auto;
+    //width: cover;
+    /* Center and scale the image nicely */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.loggedin {
+    /* The image used */
+    position: relative;
+    //background-image: url("/static/media/emotion_detection/team.jpg");
+    background-image: linear-gradient(rgba(200,245,225,0.7), rgba(200,245,225,0.7)), url("/static/media/emotion_detection/welcome.jpg");
+    //top: 10%;
+    /* Full height */
+    height: 90%;
+    max-width: 100%;
+    width: auto;
+    //width: cover;
+    /* Center and scale the image nicely */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+

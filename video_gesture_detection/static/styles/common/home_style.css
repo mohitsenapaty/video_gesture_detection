@@ -1,0 +1,66 @@
+    .top {
+        position:absolute;
+        left:25%; right:0;
+        height: 200px;
+	font-size: 30px;
+	color:#AAFFAA;
+    }
+    .left {
+        position:absolute;
+        left:0; top:200px; bottom: 0%;
+        width: 25%;
+	height: 100%;
+    }
+    .main {
+        position: absolute;
+        left:25%; top:200px; right:0; bottom:0;
+    }
+    .topleft{
+      position:absolute;
+      left:0; top:8;
+      width:25%;
+      height:192px;
+    }
+    .catagoryleft{
+    position:relative;
+    left:2%; right:2%; top:2%;
+    width:90%
+    }
+
+.top { background: #5555F0; }
+.left { background: teal; }
+.main { background: white; }
+.topleft {background: #1111F0;  font-size:40px; color:white;}
+.catagoryleft {background: #4CAF50; margin:5px 13px;}
+
+/* Set a style for all buttons */
+button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 90%;
+}
+
+/* Add a hover effect for buttons */
+button:hover {
+    opacity: 0.8;
+}
+
+form {
+    border: 3px solid #4CAF50;
+}
+
+/* Full-width inputs */
+input[type=text], input[type=password] {
+    width: 90%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    
+}
+
