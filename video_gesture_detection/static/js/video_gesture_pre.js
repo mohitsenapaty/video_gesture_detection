@@ -6,6 +6,7 @@ var colEmotionData = [];
 var started = 0;
 var midContentDiv = document.getElementById("midContent");
 var numYawns = 0;
+var current_time_counter = 0;
 
 window.setInterval(function(){
     if (started == 1 && globEmotionData !== false) colEmotionData.push(globEmotionData);
@@ -285,9 +286,13 @@ $(document).ready(function(){
         var youtube_id = $('.youtube-id').attr('id');
         socket= new WebSocket('ws://localhost:8081');
         socket.onopen = function() {
-                var json = JSON.stringify({ colAttentionData: colAttentionData,
-                                            colEmotionData: colEmotionData,
-				            youtube_id: youtube_id, numYawns: numYawns});
+                if(!started) return;
+                current_time_counter = current_time_counter+1;
+                var json = JSON.stringify({ attentionData: attentionPercent,
+                                            emotionData: globEmotionData,
+				                            youtube_id: youtube_id,
+                                            numYawns: numYawns,
+                                            current_time_counter});
                 try{
                     socket.send(json);
                 }
@@ -296,39 +301,8 @@ $(document).ready(function(){
                 }
         };
         return;
-
-        /*$.ajax({
-                type: "POST",
-                data: param,
-                url: "/get_emotion_data/",
-
-                success: function(result){
-                    //alert(result);
-                    success += 1;
-                    $.ajax({
-                            type: "POST",
-                            data: {colAttentionData:colAttentionData},
-                            url: "/get_attention_data/",
-
-                            success: function(result){
-                                alert(result);
-                                success += 1;
-                            },
-                            error: function(xhr, textStatus, errorThrown){
-                                alert('request failed');
-                            }
-                    });
-                },
-                error: function(xhr, textStatus, errorThrown){
-                    alert('request failed');
-                }
-        });
-        if (success == 2){
-            alert("Success!");
-        }*/
-
     };
-    setInterval(sendToServer, 100);
+    setInterval(sendToServer, 1000);
 
 });
 
