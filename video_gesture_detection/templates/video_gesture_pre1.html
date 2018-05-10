@@ -1,0 +1,321 @@
+{% load static %}
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+    <HEAD>
+        
+        
+        <META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=utf-8">
+        <TITLE>Simple Demonstration of how WebGazer.js works</TITLE>
+    <link rel="stylesheet" type="text/css" href="{% static 'styles/attention_detector/style.css'%}">
+        <link href="{% static 'styles/emotion_detector/bootstrap.min.css' %}" rel="stylesheet" type="text/css">
+        <style>
+            @import url(https://fonts.googleapis.com/css?family=Lato:300italic,700italic,300,700);
+            .loader {
+                position: fixed;
+                left: 0px;
+                top: 0px;
+                width: 100%;
+                height: 100%;
+                z-index: 9999;
+                background: url('/static/media/page-loader.gif') 50% 50% no-repeat rgb(249,249,249);
+                opacity: .8;
+            }
+            body {
+                font-family: 'Lato';
+                background-color: #f0f0f0;
+                margin: 0px auto;
+                /*max-width: 1150px;*/
+            }
+            
+            #overlay {
+                position: absolute;
+                top: 0px;
+                left: 0px;
+                -o-transform : scaleX(-1);
+                -webkit-transform : scaleX(-1);
+                transform : scaleX(-1);
+                -ms-filter : fliph; /*IE*/
+                filter : fliph; /*IE*/
+
+                width : 320px;
+                height : 240px;
+            }
+
+            #videoel {
+                -o-transform : scaleX(-1);
+                -webkit-transform : scaleX(-1);
+                transform : scaleX(-1);
+                -ms-filter : fliph; /*IE*/
+                filter : fliph; /*IE*/
+
+                width : 320px;
+                height : 240px;
+            }
+            
+            #container {
+                position : relative;
+                width : 320px;
+                /*margin : 0px auto;*/
+            }
+            
+            #content {
+                /*margin-top : 50px;
+                margin-left : auto;
+                margin-right : auto;
+                max-width: 600px;
+                */
+                position: absolute;
+                top:0%;
+                left:0%;
+                width:320px;
+                height:240px;
+        
+            }
+            
+            #sketch, #filter {
+                display: none;
+            }
+            
+            h2 {
+                font-weight : 400;
+            }
+            
+            .btn {
+                font-family: 'Lato';
+                font-size: 16px;
+            }
+
+            #controls {
+		position: absolute;
+		top:700px;
+                text-align : center;
+            }
+
+            #emotion_container {
+		position: absolute;
+		top:500px;
+                width: 320px;
+            }
+
+            #emotion_icons {
+		position: absolute;
+                height: 40px;
+                padding-left: 30px;
+            }
+
+            .emotion_icon {
+                width : 32px;
+                height : 32px;
+                margin-top: 4px;
+                /*margin-left : 13px;*/
+                margin-left : 25px;
+            }
+
+            #emotion_chart, #emotion_icons {
+		position: absolute;
+                margin: 0 auto;
+                width : 320px;
+            }
+
+            #icon1, #icon2, #icon3, #icon4, #icon5, #icon6 {
+                visibility : hidden;
+            }
+
+            /* d3 */
+            .bar {
+                fill : steelblue;
+                fill-opacity : .9;
+            }
+
+        </style>
+        <script>
+            // getUserMedia only works over https in Chrome 47+, so we redirect to https. Also notify user if running from file.
+            if (window.location.protocol == "file:") {
+                alert("You seem to be running this example directly from a file. Note that these examples only work when served from a server or localhost due to canvas cross-domain restrictions.");
+            } else if (window.location.hostname !== "localhost" && window.location.protocol !== "https:"){
+                window.location.protocol = "https";
+            }
+        </script>
+        <script type="text/javascript">
+
+            var _gaq = _gaq || [];
+            _gaq.push(['_setAccount', 'UA-32642923-1']);
+            _gaq.push(['_trackPageview']);
+
+            (function() {
+                var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+            })();
+
+        </script>
+                
+    </HEAD>
+
+    <BODY LANG="en-US" LINK="#0000ff" DIR="LTR">
+        <div class="loader"></div>
+        <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        <script type="text/javascript">
+        $(window).load(function() {
+	        $(".loader").fadeOut("slow");
+        })
+        </script>
+                <script src="{% static 'js/face/clmtrackr.js' %}"></script>	
+                <script src="{% static 'js/face/model_pca_20_svm.js' %}"></script>
+                <script src="{% static 'js/face/utils.js' %}"></script>
+                <script src="{% static 'js/face/mosse.js' %}"></script>
+                <script src="{% static 'js/face/frontalface.js' %}"></script>
+                <script src="{% static 'js/face/jsfeat_detect.js' %}"></script>
+                <script src="{% static 'js/face/left_eye_filter.js' %}"></script>
+                <script src="{% static 'js/face/right_eye_filter.js' %}"></script>
+                <script src="{% static 'js/face/nose_filter.js' %}"></script>
+                <script src="{% static 'js/face/model_pca_20_svm.js' %}"></script>
+                <script src="{% static 'js/face/svmfilter_webgl.js' %}"></script>
+                <script src="{% static 'js/face/svmfilter_fft.js' %}"></script>
+                <script src="{% static 'js/face/mossefilter.js' %}"></script>
+
+        <script type="text/javascript" src="{% static 'js/Clouds_files/three.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/Clouds_files/Detector.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/Clouds_files/jquery.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/Clouds_files/yawn.js' %}"></script>
+
+
+    	<script src="{% static 'js/emotion_detector/decorator_js/libs/utils.js' %}"></script>
+        <script src="{% static 'js/emotion_detector/decorator_js/libs/Stats.js' %}"></script>
+        <script src="{% static 'js/emotion_detector/decorator_js/libs/d3.min.js' %}"></script>
+        <script src="{% static 'js/emotion_detector/main_js/clmtrackr.js' %}"></script>
+        <script src="{% static 'js/emotion_detector/model_js/model_pca_20_svm.js' %}"></script>
+        <script src="{% static 'js/emotion_detector/decorator_js/emotion_classifier.js' %}"></script>
+        <script src="{% static 'js/emotion_detector/decorator_js/emotionmodel.js' %}"></script>
+        <link rel="stylesheet" href="{% static "main.css" %}" type="text/css" media="screen" />
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        
+
+    <div id="mydiv" style="position:absolute; top:2%; left:60%" >
+        <h1 style="color:#C0C0C0" align="right" id="calibHeader">
+            Click on a few locations within the screen<br>
+            while looking purposefully at the cursor.<br>
+            Both clicks and cursor movements<br>
+            make the predictions more accurate. 
+        </h1>
+
+    </div>
+	<div id="content">
+            
+            <div id="container">
+                <video id="videoel" width="320" height="240" preload="auto" loop>
+                </video>
+                <canvas id="overlay" width="320" height="240"></canvas>
+            </div>
+            <canvas id="sketch" width="320" height="240"></canvas>
+            
+            
+        </div>
+    <div id = "displayDiv" style="display:none">
+	    
+	
+	    <div id="midContent" style="position:absolute; top:2%; left:60%" >
+
+	    </div>
+        <div id="youtubeIframe" style="position:absolute; top:15%; left:20%; right:20%; bottom:15%; background-color:green;" >
+        <iframe class="youtube-id" id="{{yt_id}}" src="https://www.youtube.com/embed/{{yt_id}}?enablejsapi=1" width="100%" height="100%" frameborder="0" fs="0"></iframe>
+        </div>
+        <div id ="attentionDisplayDiv" style="position:absolute; top:85%; left:2%; height:70px; width:160px">No Position Detected!</div>
+        <div id ="buttonBox" style="position:absolute; top:92%; left:2%; height:80px; width:160px">
+            
+            <p id="statusRecord">Not Recording</p>
+        </div>
+        
+	    <div id="emotion_container">
+            <div id="emotion_icons">
+                <img class="emotion_icon" id="icon1" src="{% static 'media/emotion_detection/icon_angry.png'%}">
+                <img class="emotion_icon" id="icon2" src="{% static 'media/emotion_detection/icon_sad.png'%}">
+                <img class="emotion_icon" id="icon3" src="{% static 'media/emotion_detection/icon_surprise.png'%}">
+                <img class="emotion_icon" id="icon4" src="{% static 'media/emotion_detection/icon_happy.png'%}">
+            </div>
+            <div id='emotion_chart'></div>
+        </div>
+        
+        <div id="controls">
+            <input class="btn" type="button" value="wait, loading video" disabled="disabled" onclick="player.playVideo()" id="startbutton"></input>
+            <button id="btnSend">Send Data</button>
+        </div>
+    </div>
+    <div id="entryBox" style="position:absolute; top:45%; left:45%; height:40px; width:80px">
+        <button id="doneCalib" name="doneCalib" onclick="changeScreen()">Done Calibrating</button>
+    </div>
+        
+        
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+        <link rel="stylesheet" href="{% static "main.css" %}" type="text/css" media="screen" />
+        <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/json2/20160511/json2.min.js"></script>
+        <script src="{% static 'js/attention_detector/webgazer.js' %}"></script>
+        <script src="{% static 'js/video_gesture_pre.js' %}"> </script>
+        <script>
+        var player;
+        var playing = 0;
+        var startbutton = document.getElementById('startbutton');
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player( 'youtubeIframeID', {
+                events: { 'onStateChange': onPlayerStateChange }
+            });
+        }
+        function onPlayerStateChange(event) {
+            switch(event.data) {
+                case 0:
+                    if (playing == 1){
+                        globalRecordData(); 
+                        playing = 0;
+                        startbutton.value = "video ended";
+                    }
+                    //alert('video ended');
+                break;
+                case 1:
+                    if (playing == 0){
+                        globalRecordData();
+                        playing = 1;
+                        
+                        startbutton.value = "stop";
+                    }
+                    //alert('video playing from '+player.getCurrentTime()+":" + recordAttention);
+                break;
+                case 2:
+                    if (playing == 1){
+                        globalRecordData();
+                        playing = 0;
+                        startbutton.value = "start  ";
+                    }
+                    //alert('video paused at '+player.getCurrentTime()+":" + recordAttention);
+                break;
+            }
+        }
+        function globalRecordData(){
+            
+            startVideo();
+            if (recordAttention == 0){
+                if (playing == 0) {
+                    player.playVideo();
+                    document.getElementById("statusRecord").innerHTML = "Recording Started!";
+                    recordAttention = 1;
+                }
+            }
+            else{
+                if ( playing == 1){ 
+                    player.pauseVideo();
+                    document.getElementById("statusRecord").innerHTML = "Recording Stopped!";
+                    recordAttention=0;
+                }
+            }
+
+        }
+      
+        </script>
+        <script src="https://www.youtube.com/iframe_api"></script>
+
+    </BODY>

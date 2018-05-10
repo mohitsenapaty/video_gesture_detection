@@ -33,6 +33,13 @@ def video_gesture_pre(request):
     return render(request, template, returnDict)
 
 
+def video_gesture_pre1(request):
+    yt_id = request.GET['id'] 
+    template = 'video_gesture_pre1.html'
+    returnDict = {'yt_id':yt_id}
+    return render(request, template, returnDict)
+
+
 def video_gesture_pre_no_outline(request):
     template = 'video_gesture_pre_no_outline.html'
     returnDict = {}

@@ -28,5 +28,5 @@ urlpatterns = [
     url(r'^get_emotion_data/$', gesture_views.video_gesture_pre, name='get_emotion_data'),
     url(r'^get_attention_data/$', gesture_views.video_gesture_pre, name='get_attention_data'),
     url(r'^yawn_detection/$', gesture_views.yawn_detection, name='yawn_detection'),
-
+    url(r'^video_gesture_pre1', gesture_views.video_gesture_pre1, name='video_gesture_pre1'),
 ]

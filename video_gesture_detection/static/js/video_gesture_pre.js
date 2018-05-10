@@ -282,10 +282,12 @@ $(document).ready(function(){
     function sendToServer(){
         //alert("clicked");
         var success = 0;
+        var youtube_id = $('.youtube-id').attr('id');
         socket= new WebSocket('ws://localhost:8081');
         socket.onopen = function() {
                 var json = JSON.stringify({ colAttentionData: colAttentionData,
-                                            colEmotionData: colEmotionData});
+                                            colEmotionData: colEmotionData,
+				            youtube_id: youtube_id, numYawns: numYawns});
                 try{
                     socket.send(json);
                 }
