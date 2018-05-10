@@ -292,7 +292,7 @@ $(document).ready(function(){
                                             emotionData: globEmotionData,
 				                            youtube_id: youtube_id,
                                             numYawns: numYawns,
-                                            current_time_counter});
+                                            time_counter: current_time_counter});
                 try{
                     socket.send(json);
                 }
