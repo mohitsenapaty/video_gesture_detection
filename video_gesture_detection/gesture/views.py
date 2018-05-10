@@ -22,6 +22,11 @@ def home(request):
     return render(request, template, returnDict) 
 
 
+def yawn_detection(request):
+    template = 'yawn_detection.html'
+    returnDict = {}
+    return render(request, template, returnDict)
+
 def video_gesture_pre(request):
     template = 'video_gesture_pre.html'
     returnDict = {}

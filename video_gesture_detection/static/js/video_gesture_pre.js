@@ -5,6 +5,7 @@ var globEmotionData;
 var colEmotionData = [];
 var started = 0;
 var midContentDiv = document.getElementById("midContent");
+var numYawns = 0;
 
 window.setInterval(function(){
     if (started == 1 && globEmotionData !== false) colEmotionData.push(globEmotionData);
@@ -71,6 +72,7 @@ function startVideo() {
     if (started == 0){
         started = 1;
         drawLoop();
+        positionLoop();
         var startbutton = document.getElementById('startbutton');
         startbutton.value = "stop";
     }    
@@ -80,6 +82,13 @@ function startVideo() {
         startbutton.value = "start";
     }
 }
+
+var shiftingAvg = 0;
+var mSeen = 0; 
+var mSize = 10; // how many measurements to average
+
+// lower than this means the mouth is open
+var threshold = 4.4;
 
 function drawLoop() {
     requestAnimFrame(drawLoop);
@@ -105,6 +114,56 @@ function drawLoop() {
     }
 }
 
+function positionLoop() {
+        requestAnimationFrame(positionLoop);
+        var positions = ctrack.getCurrentPosition();
+
+        //get mouth coordinates
+        var mLeft = positions[44]
+        var mRight = positions[50]
+        var mTop = positions[60]
+        var mBottom = positions[57]
+
+        //calculate length-height ratio to see if mouth is open
+        if (Array.isArray(mLeft) && mLeft.length==2 &&
+                Array.isArray(mRight) && mRight.length==2 &&
+                Array.isArray(mTop) && mTop.length==2 &&
+                Array.isArray(mBottom) && mBottom.length==2 ) {
+                        
+                var distLR = Math.sqrt(Math.pow(mRight[1]-mLeft[1], 2) + Math.pow(mRight[0]-mLeft[0], 2))
+                
+                var distTB = Math.sqrt(Math.pow(mTop[1]-mBottom[1], 2) + Math.pow(mTop[0]-mBottom[0], 2))
+
+                // average several measurements to avoid errors
+                if (mSeen < mSize) {
+                        shiftingAvg += (distLR/distTB)
+                        mSeen += 1
+                } else {
+                        shiftingAvg = shiftingAvg/mSize
+                        mSeen = 0
+
+                        if (shiftingAvg < threshold && started == 1) {
+
+                                //console.log("You yawned");
+
+                                //videoBox.get(0).pause();
+
+                                //var currTime = new Date();
+
+                                //alert('You Snooze, you loose!' +'\n\n'+'You yawned'+'\n\n');
+                                numYawns++;
+                                
+
+                                //startTime = new Date();
+                                //videoBox.get(0).play();
+                                //gameActive = true;
+                                
+                        } 
+                }
+        }
+
+        //var currTime = new Date();
+}
 delete emotionModel['disgusted'];
 delete emotionModel['fear'];
 var ec = new emotionClassifier();
@@ -220,14 +279,15 @@ $(document).ready(function(){
             //$('#usertext').val('');
         }
     });
+    
     $('#btnSend').click(function(){
-        //alert("clicked");
+        alert("clicked");
         var success = 0;
         var param = {"data":colEmotionData}
         $.ajax({
                 type: "POST",
                 data: param,
-                url: "../get_emotion_data/", 
+                url: "/get_emotion_data/", 
                 
                 success: function(result){
                     //alert(result);
@@ -235,7 +295,7 @@ $(document).ready(function(){
                     $.ajax({
                             type: "POST",
                             data: {colAttentionData:colAttentionData},
-                            url: "../get_attention_data/", 
+                            url: "/get_attention_data/", 
                             
                             success: function(result){
                                 alert(result);
@@ -350,7 +410,8 @@ window.onload = function() {
             requestAnimFrame(drawLoop);
             overlay.getContext('2d').clearRect(0,0,width,height);
             if (cl.getCurrentPosition()) {
-                cl.draw(overlay);
+                //cl.draw(overlay);
+                ;
             }
             var attentionState = "No attention Data";
             var predDot = webgazer.getSmoothDot();
@@ -390,7 +451,7 @@ window.onload = function() {
 		        
             }
             attentionPercent = (totalAttention * 100)/a1_cntr;
-		    attentionDisplayDiv.textContent = "X: " +pred_x+" Y: "+pred_y+" "+attentionState+" AttentionPercent: "+attentionPercent;
+		    attentionDisplayDiv.textContent = "X: " +pred_x+" Y: "+pred_y+" "+attentionState+" AttentionPercent: "+attentionPercent + " No. of Yawns: " + numYawns;
         }
             
         drawLoop();

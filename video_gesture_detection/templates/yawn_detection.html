@@ -1,0 +1,420 @@
+{% load static %}
+<!DOCTYPE html>
+<!-- saved from url=(0046)http://mrdoob.com/lab/javascript/webgl/clouds/ -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Fascinate Inline">
+                <script src="{% static 'js/face/clmtrackr.js' %}"></script>	
+                <script src="{% static 'js/face/model_pca_20_svm.js' %}"></script>
+                <script src="{% static 'js/face/utils.js' %}"></script>
+                <script src="{% static 'js/face/mosse.js' %}"></script>
+                <script src="{% static 'js/face/frontalface.js' %}"></script>
+                <script src="{% static 'js/face/jsfeat_detect.js' %}"></script>
+                <script src="{% static 'js/face/left_eye_filter.js' %}"></script>
+                <script src="{% static 'js/face/right_eye_filter.js' %}"></script>
+                <script src="{% static 'js/face/nose_filter.js' %}"></script>
+                <script src="{% static 'js/face/model_pca_20_svm.js' %}"></script>
+                <script src="{% static 'js/face/svmfilter_webgl.js' %}"></script>
+                <script src="{% static 'js/face/svmfilter_fft.js' %}"></script>
+                <script src="{% static 'js/face/mossefilter.js' %}"></script>
+		<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+		<title>Yawniverse</title>
+		
+		<style type="text/css">
+
+			body {
+				//background-color: #fbe7ff;
+				margin: 0px;
+				overflow: hidden;
+				font-family:Monospace;
+				font-size:13px;
+				text-align:center;
+				font-weight: bold;
+				text-align:center;
+			}
+
+			a {
+				color:#fce1ff;
+			}
+
+		</style></head>
+	<body cz-shortcut-listen="true">
+
+        <script type="text/javascript" src="{% static 'js/Clouds_files/three.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/Clouds_files/Detector.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/Clouds_files/jquery.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/Clouds_files/yawn.js' %}"></script>
+		<script id="vs" type="x-shader/x-vertex">
+
+			varying vec2 vUv;
+
+			void main() {
+
+				vUv = uv;
+				gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+
+			}
+
+		</script>
+
+		<script id="fs" type="x-shader/x-fragment">
+
+			uniform sampler2D map;
+
+			uniform vec3 fogColor;
+			uniform float fogNear;
+			uniform float fogFar;
+
+			varying vec2 vUv;
+
+			void main() {
+
+				float depth = gl_FragCoord.z / gl_FragCoord.w;
+				float fogFactor = smoothstep( fogNear, fogFar, depth );
+
+				gl_FragColor = texture2D( map, vUv );
+				gl_FragColor.w *= pow( gl_FragCoord.z, 20.0 );
+				gl_FragColor = mix( gl_FragColor, vec4( fogColor, gl_FragColor.w ), fogFactor );
+
+			}
+
+		</script>
+
+		<script type="text/javascript">
+
+			if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
+
+			var container2;
+			var camera, scene, renderer;
+			var mesh, geometry, material;
+
+			var mouseX = 0, mouseY = 0;
+			var start_time = Date.now();
+
+			var windowHalfX = window.innerWidth / 2;
+			var windowHalfY = window.innerHeight / 2;
+
+			//init();
+
+			function init() {
+
+				container2 = document.createElement( 'div' );
+				document.body.appendChild( container2 );
+
+				// Bg gradient
+
+				var canvas = document.createElement( 'canvas' );
+				canvas.width = 32;
+				canvas.height = window.innerHeight;
+
+				var context = canvas.getContext( '2d' );
+
+				var gradient = context.createLinearGradient( 0, 0, 0, canvas.height );
+				gradient.addColorStop(0, "#132e4d");
+				gradient.addColorStop(0.5, "#1e4877");
+
+				context.fillStyle = gradient;
+				context.fillRect(0, 0, canvas.width, canvas.height);
+
+
+				//
+
+				camera = new THREE.PerspectiveCamera( 30, window.innerWidth / window.innerHeight, 1, 3000 );
+				camera.position.z = 6000;
+
+				scene = new THREE.Scene();
+
+				geometry = new THREE.Geometry();
+
+				var texture = THREE.ImageUtils.loadTexture( 'cloud10.png', null, animate );
+				texture.magFilter = THREE.LinearMipMapLinearFilter;
+				texture.minFilter = THREE.LinearMipMapLinearFilter;
+
+				var fog = new THREE.Fog( 0x1e4877, - 100, 3000 );
+
+				material = new THREE.ShaderMaterial( {
+
+					uniforms: {
+
+						"map": { type: "t", value: texture },
+						"fogColor" : { type: "c", value: fog.color },
+						"fogNear" : { type: "f", value: fog.near },
+						"fogFar" : { type: "f", value: fog.far },
+
+					},
+					vertexShader: document.getElementById( 'vs' ).textContent,
+					fragmentShader: document.getElementById( 'fs' ).textContent,
+					depthWrite: false,
+					depthTest: false,
+					transparent: true
+
+				} );
+
+				var plane = new THREE.Mesh( new THREE.PlaneGeometry( 64, 64 ) );
+
+				for ( var i = 0; i < 8000; i++ ) {
+
+					plane.position.x = Math.random() * 1000 - 500;
+					plane.position.y = - Math.random() * Math.random() * 200 - 15;
+					plane.position.z = i;
+					plane.rotation.z = Math.random() * Math.PI;
+					plane.scale.x = plane.scale.y = Math.random() * Math.random() * 1.5 + 0.5;
+
+					THREE.GeometryUtils.merge( geometry, plane );
+
+				}
+
+				mesh = new THREE.Mesh( geometry, material );
+				scene.add( mesh );
+
+				mesh = new THREE.Mesh( geometry, material );
+				mesh.position.z = - 8000;
+				scene.add( mesh );
+
+				renderer = new THREE.WebGLRenderer( { antialias: false } );
+				renderer.setSize( window.innerWidth, window.innerHeight );
+				container2.appendChild( renderer.domElement );
+
+				document.addEventListener( 'mousemove', onDocumentMouseMove, false );
+				window.addEventListener( 'resize', onWindowResize, false );
+
+			}
+
+			function onDocumentMouseMove( event ) {
+
+				mouseX = ( event.clientX - windowHalfX ) * 0.25;
+				mouseY = ( event.clientY - windowHalfY ) * 0.15;
+
+			}
+
+			function onWindowResize( event ) {
+
+				camera.aspect = window.innerWidth / window.innerHeight;
+				camera.updateProjectionMatrix();
+
+				renderer.setSize( window.innerWidth, window.innerHeight );
+
+			}
+
+			function animate() {
+
+				requestAnimationFrame( animate );
+
+				position = ( ( Date.now() - start_time ) * 0.03 ) % 8000;
+
+				camera.position.x += ( mouseX - camera.position.x ) * 0.01;
+				camera.position.y += ( - mouseY - camera.position.y ) * 0.01;
+				camera.position.z = - position + 8000;
+
+				renderer.render( scene, camera );
+
+			}
+
+		</script>
+		
+			<div id="container2">
+                            <input type="checkbox" id="hideCam" onclick="toggleVideo();" />
+					<video id="videoel2" width="200" height="150" preload="auto" loop>
+						<!--<video id="videoel2" width="320" height="240" preload="auto">-->
+						<!--<source src="./media/franck.ogv" type="video/ogg"/>-->
+					</video>
+					<canvas id="overlay2" width="200" height="150"></canvas>
+			</div>
+			<div id="box">
+				<video id="myVideo">
+                                </video>
+			</div>
+			<div >
+				
+			</div>
+		</div>
+	
+
+</body>
+
+<script>
+				var gameActive = true;
+
+				var startTime = new Date();
+
+				var checkbox = document.getElementById('hideCam');
+				var videoBox = $('#myVideo');
+
+				var vid = document.getElementById('videoel2');
+				var overlay2 = document.getElementById('overlay2');
+				var overlay2CC = overlay2.getContext('2d');
+				
+				
+				function toggleVideo() {
+
+					if (checkbox.checked) {				
+						vid.style.display = 'block';
+						overlay2.style.display = 'block';
+					} else {
+						vid.style.display = 'none';
+						overlay2.style.display = 'none';
+					}
+					
+
+					console.log('hiding');
+				}
+				
+				var ctrack = new clm.tracker({useWebGL : true});
+				ctrack.init(pModel);
+				
+				navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
+				window.URL = window.URL || window.webkitURL || window.msURL || window.mozURL;
+
+				// check for camerasupport
+				if (navigator.getUserMedia) {
+					// set up stream
+					
+					var videoSelector = {video : true};
+					if (window.navigator.appVersion.match(/Chrome\/(.*?) /)) {
+						var chromeVersion = parseInt(window.navigator.appVersion.match(/Chrome\/(\d+)\./)[1], 10);
+						if (chromeVersion < 20) {
+							videoSelector = "video";
+						}
+					};
+				
+					navigator.getUserMedia(videoSelector, function( stream ) {
+						if (vid.mozCaptureStream) {
+							vid.mozSrcObject = stream;
+						} else {
+							vid.src = (window.URL && window.URL.createObjectURL(stream)) || stream;
+						}
+						vid.play();
+					}, function() {
+						alert("There was some problem trying to fetch video from your webcam.");
+					});
+				} else {
+					alert("Your browser does not seem to support getUserMedia, using a fallback video instead.");
+				}
+
+				vid.addEventListener('canplay', startVideo, false);
+				
+				function startVideo() {
+					// start video
+					vid.play();
+					// start tracking
+					ctrack.start(vid);
+					// start loop to draw face
+					drawLoop();
+					positionLoop();
+				}
+				
+				// draw face features on top of video
+				function drawLoop() {
+					requestAnimFrame(drawLoop);
+					overlay2CC.clearRect(0, 0, 400, 300);
+					//psrElement.innerHTML = "score :" + ctrack.getScore().toFixed(4);
+					if (ctrack.getCurrentPosition()) {
+						ctrack.draw(overlay2);
+					}
+				}
+				
+				// compute a shifting average of measurements
+				var shiftingAvg = 0;
+				var mSeen = 0; 
+				var mSize = 10; // how many measurements to average
+
+				// lower than this means the mouth is open
+				var threshold = 4.4;
+
+				function positionLoop() {
+					requestAnimationFrame(positionLoop);
+					var positions = ctrack.getCurrentPosition();
+
+					//get mouth coordinates
+					var mLeft = positions[44]
+					var mRight = positions[50]
+					var mTop = positions[60]
+					var mBottom = positions[57]
+
+					//calculate length-height ratio to see if mouth is open
+					if (Array.isArray(mLeft) && mLeft.length==2 &&
+						Array.isArray(mRight) && mRight.length==2 &&
+						Array.isArray(mTop) && mTop.length==2 &&
+						Array.isArray(mBottom) && mBottom.length==2 ) {
+							
+						var distLR = Math.sqrt(Math.pow(mRight[1]-mLeft[1], 2) + Math.pow(mRight[0]-mLeft[0], 2))
+						
+						var distTB = Math.sqrt(Math.pow(mTop[1]-mBottom[1], 2) + Math.pow(mTop[0]-mBottom[0], 2))
+
+						// average several measurements to avoid errors
+						if (mSeen < mSize) {
+							shiftingAvg += (distLR/distTB)
+							mSeen += 1
+						} else {
+							shiftingAvg = shiftingAvg/mSize
+							mSeen = 0
+
+							if (shiftingAvg < threshold && gameActive) {
+
+								console.log("You yawned");
+
+								videoBox.get(0).pause();
+
+								var currTime = new Date();
+
+								alert('You Snooze, you loose!' +'\n\n'+'You yawned'+'\n\n');
+
+								startTime = new Date();
+								videoBox.get(0).play();
+								gameActive = true;
+								
+							} 
+						}
+					}
+
+					var currTime = new Date();
+				}
+				
+
+				
+			</script>
+
+			<style type="text/css">
+			#overlay2 {
+				position: absolute;
+				top: 0px;
+				left: 0px;
+				-o-transform : scaleX(-1);
+				-webkit-transform : scaleX(-1);
+				transform : scaleX(-1);
+				-ms-filter : fliph; /*IE*/
+				filter : fliph; /*IE*/
+				display: none;
+			}
+
+			#videoel2 {
+				-o-transform : scaleX(-1);
+				-webkit-transform : scaleX(-1);
+				transform : scaleX(-1);
+				-ms-filter : fliph; /*IE*/
+				filter : fliph; /*IE*/
+				display:none;
+			}
+			
+			#container {
+				position : absolute;
+				right: 0px;
+				width : 200px;
+				top: 0px;
+				/*margin : 0px auto;*/
+			}
+			#hideCam {
+				position: absolute;
+    			z-index: 100;
+			}
+			#gameOver {
+				cursor: pointer;
+			}
+			h3 {
+				color: pink;
+				font-size: 40px;
+				font-family: 'Fascinate Inline', serif;
+			}
+			
+			</style>
+</html>

@@ -7,8 +7,8 @@ from email.utils import COMMASPACE, formatdate
 
 
 
-email_id = "aaa@gmail.com"
-email_pwd = "aaa"
+email_id = "forkbombers10@gmail.com"
+email_pwd = "Bombers@10"
 
 
 
