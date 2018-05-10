@@ -75,7 +75,7 @@ function startVideo() {
         positionLoop();
         var startbutton = document.getElementById('startbutton');
         startbutton.value = "stop";
-    }    
+    }
     else{
         started = 0;
         var startbutton = document.getElementById('startbutton');
@@ -84,7 +84,7 @@ function startVideo() {
 }
 
 var shiftingAvg = 0;
-var mSeen = 0; 
+var mSeen = 0;
 var mSize = 10; // how many measurements to average
 
 // lower than this means the mouth is open
@@ -129,9 +129,9 @@ function positionLoop() {
                 Array.isArray(mRight) && mRight.length==2 &&
                 Array.isArray(mTop) && mTop.length==2 &&
                 Array.isArray(mBottom) && mBottom.length==2 ) {
-                        
+
                 var distLR = Math.sqrt(Math.pow(mRight[1]-mLeft[1], 2) + Math.pow(mRight[0]-mLeft[0], 2))
-                
+
                 var distTB = Math.sqrt(Math.pow(mTop[1]-mBottom[1], 2) + Math.pow(mTop[0]-mBottom[0], 2))
 
                 // average several measurements to avoid errors
@@ -152,13 +152,13 @@ function positionLoop() {
 
                                 //alert('You Snooze, you loose!' +'\n\n'+'You yawned'+'\n\n');
                                 numYawns++;
-                                
+
 
                                 //startTime = new Date();
                                 //videoBox.get(0).play();
                                 //gameActive = true;
-                                
-                        } 
+
+                        }
                 }
         }
 
@@ -168,7 +168,7 @@ delete emotionModel['disgusted'];
 delete emotionModel['fear'];
 var ec = new emotionClassifier();
 ec.init(emotionModel);
-var emotionData = ec.getBlank();    
+var emotionData = ec.getBlank();
 /************ d3 code for barchart *****************/
 
 var margin = {top : 20, right : 20, bottom : 10, left : 40},
@@ -235,7 +235,7 @@ function updateData(data) {
         .attr("y", function(datum) { return height - y(datum.value); })
         .text(function(datum) { return datum.value.toFixed(1);});
 
-    // enter 
+    // enter
     rects.enter().append("svg:rect");
     texts.enter().append("svg:text");
 
@@ -279,24 +279,35 @@ $(document).ready(function(){
             //$('#usertext').val('');
         }
     });
-    
-    $('#btnSend').click(function(){
-        alert("clicked");
+    function sendToServer(){
+        //alert("clicked");
         var success = 0;
-        var param = {"data":colEmotionData}
-        $.ajax({
+        socket= new WebSocket('ws://localhost:8081');
+        socket.onopen = function() {
+                var json = JSON.stringify({ colAttentionData: colAttentionData,
+                                            colEmotionData: colEmotionData});
+                try{
+                    socket.send(json);
+                }
+                catch(err){
+                    console.log('error: '+ err)
+                }
+        };
+        return;
+
+        /*$.ajax({
                 type: "POST",
                 data: param,
-                url: "/get_emotion_data/", 
-                
+                url: "/get_emotion_data/",
+
                 success: function(result){
                     //alert(result);
                     success += 1;
                     $.ajax({
                             type: "POST",
                             data: {colAttentionData:colAttentionData},
-                            url: "/get_attention_data/", 
-                            
+                            url: "/get_attention_data/",
+
                             success: function(result){
                                 alert(result);
                                 success += 1;
@@ -312,9 +323,11 @@ $(document).ready(function(){
         });
         if (success == 2){
             alert("Success!");
-        }
-        
-    });
+        }*/
+
+    };
+    setInterval(sendToServer, 100);
+
 });
 
 var recordAttention = 0;
@@ -330,14 +343,14 @@ window.setInterval(function(){
 window.onload = function() {
     var attentionDisplayDiv = document.getElementById("attentionDisplayDiv");
     var videoDivRect = document.getElementById("youtubeIframe");
-    
+
     var totalAttention = 0.00;
     var attentionArray = [];
     var a_cntr = 0;
     var a1_cntr = 0;
-    
+
     var offsets = videoDivRect.getBoundingClientRect();
-    
+
     webgazer.setRegression('ridge') /* currently must set regression and tracker */
         .setTracker('clmtrackr')
         .setGazeListener(function(data, clock) {
@@ -350,7 +363,7 @@ window.onload = function() {
     var height = 240;
     var topDist = '0px';
     var leftDist = '0px';
-    
+
     var setup = function() {
         var video = document.getElementById('videoel');
 	vid = document.getElementById('videoel');
@@ -362,7 +375,7 @@ window.onload = function() {
 	// check for camerasupport
 	if (navigator.getUserMedia) {
 	    // set up stream
-	    
+
 	    var videoSelector = {video : true};
 	    if (window.navigator.appVersion.match(/Chrome\/(.*?) /)) {
 		var chromeVersion = parseInt(window.navigator.appVersion.match(/Chrome\/(\d+)\./)[1], 10);
@@ -419,7 +432,7 @@ window.onload = function() {
             var pred_y = predDot.y;
             offsets = videoDivRect.getBoundingClientRect();
             //attentionDisplayDiv.textContent="X: "+ pred.x + " Y: "+pred.y;
-                        
+
             if (recordAttention == 1 && predDot !== null){
                 if (pred_x < offsets.left || pred_y < offsets.top || pred_x > offsets.right || pred_y > offsets.bottom)
                 {
@@ -446,14 +459,14 @@ window.onload = function() {
 		                totalAttention += 0;
 		            }
 		            attentionArray = [];
-                    
+
                 }
-		        
+
             }
             attentionPercent = (totalAttention * 100)/a1_cntr;
 		    attentionDisplayDiv.textContent = "X: " +pred_x+" Y: "+pred_y+" "+attentionState+" AttentionPercent: "+attentionPercent + " No. of Yawns: " + numYawns;
         }
-            
+
         drawLoop();
     };
     function checkIfReady() {
@@ -467,10 +480,10 @@ window.onload = function() {
 };
 window.onbeforeunload = function() {
     //webgazer.end(); //Uncomment if you want to save the data even if you reload the page.
-    window.localStorage.clear(); //Comment out if you want to save data across different sessions 
+    window.localStorage.clear(); //Comment out if you want to save data across different sessions
 }
 function recordButtonToggle() {
-    
+
     text = document.getElementById("b1").innerHTML;
     if (text == "Start") {
         document.getElementById("b1").innerHTML = "Stop";
@@ -478,10 +491,10 @@ function recordButtonToggle() {
         recordAttention = 1;
     }
     else {
-        document.getElementById("b1").innerHTML = "Start";   
+        document.getElementById("b1").innerHTML = "Start";
         document.getElementById("statusRecord").innerHTML = "Not Recording!";
         recordAttention = 0;
-    } 
+    }
 }
 
 function changeScreen(){
@@ -514,8 +527,8 @@ $(document).ready(function(){
         $.ajax({
                 type: "POST",
                 data: {colAttentionData:colAttentionData},
-                url: "../get_attention_data/", 
-                
+                url: "../get_attention_data/",
+
                 success: function(result){
                     alert(result);
                 },
