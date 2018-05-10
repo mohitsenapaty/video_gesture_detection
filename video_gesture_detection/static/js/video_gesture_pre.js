@@ -425,7 +425,7 @@ window.onload = function() {
             requestAnimFrame(drawLoop);
             overlay.getContext('2d').clearRect(0,0,width,height);
             if (cl.getCurrentPosition()) {
-                //cl.draw(overlay);
+                cl.draw(overlay);
                 ;
             }
             var attentionState = "No attention Data";

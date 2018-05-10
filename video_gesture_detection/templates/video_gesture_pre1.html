@@ -262,7 +262,8 @@
         var playing = 0;
         var startbutton = document.getElementById('startbutton');
         function onYouTubeIframeAPIReady() {
-            player = new YT.Player( 'youtubeIframeID', {
+	    var youtubeIframeID = $('.youtube-id').attr('id');
+            player = new YT.Player( youtubeIframeID, {
                 events: { 'onStateChange': onPlayerStateChange }
             });
         }
