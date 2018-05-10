@@ -28,6 +28,24 @@ def video_gesture_pre(request):
     return render(request, template, returnDict)
 
 
+def video_gesture_pre_no_outline(request):
+    template = 'video_gesture_pre_no_outline.html'
+    returnDict = {}
+    return render(request, template, returnDict)
+
+
+def video_gesture_pre_all(request):
+    template = 'video_gesture_pre_all.html'
+    returnDict = {}
+    return render(request, template, returnDict)
+
+
+def video_gesture_pre_all_no_outline(request):
+    template = 'video_gesture_pre_all_no_outline.html'
+    returnDict = {}
+    return render(request, template, returnDict)
+
+
 @csrf_exempt
 def get_attention_data(request):
     #fromJs = json.loads(request.POST)

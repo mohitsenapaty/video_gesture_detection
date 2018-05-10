@@ -22,4 +22,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', gesture_views.home, name='home'),
     url(r'^video_gesture_pre/$', gesture_views.video_gesture_pre, name='video_gesture_pre'),
+    url(r'^video_gesture_pre_no_outline/$', gesture_views.video_gesture_pre_no_outline, name='video_gesture_pre_no_outline'),
+    url(r'^video_gesture_pre_all/$', gesture_views.video_gesture_pre_all, name='video_gesture_pre_all'),
+    url(r'^video_gesture_pre_all_no_outline/$', gesture_views.video_gesture_pre_all_no_outline, name='video_gesture_pre_all_no_outline'),
 ]
