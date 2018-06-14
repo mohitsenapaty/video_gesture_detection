@@ -1,0 +1,13 @@
+25080:C 11 May 05:03:02.756 # oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo
+25080:C 11 May 05:03:02.757 # Redis version=4.0.9, bits=64, commit=00000000, modified=0, pid=25080, just started
+25080:C 11 May 05:03:02.757 # Warning: no config file specified, using the default config. In order to specify a config file use redis-server /path/to/redis.conf
+25080:M 11 May 05:03:02.758 * Increased maximum number of open files to 10032 (it was originally set to 256).
+25080:M 11 May 05:03:02.760 * Running mode=standalone, port=6379.
+25080:M 11 May 05:03:02.760 # Server initialized
+25080:M 11 May 05:03:02.760 * DB loaded from disk: 0.000 seconds
+25080:M 11 May 05:03:02.760 * Ready to accept connections
+25080:signal-handler (1525995184) Received SIGINT scheduling shutdown...
+25080:M 11 May 05:03:05.020 # User requested shutdown...
+25080:M 11 May 05:03:05.020 * Saving the final RDB snapshot before exiting.
+25080:M 11 May 05:03:05.023 * DB saved on disk
+25080:M 11 May 05:03:05.023 # Redis is now ready to exit, bye bye...
